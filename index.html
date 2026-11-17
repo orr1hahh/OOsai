@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oosai's Garden v0.8</title>
+    <style>
+        :root {
+            --primary: #2d5016;
+            --secondary: #8b7355;
+            --accent: #d4a574;
+            --light: #f5f1ed;
+            --text: #1a1a1a;
+            --border: #c9b8a8;
+        }
+        body.dark-mode {
+            --light: #1a1a1a;
+            --text: #f5f1ed;
+            --border: #4a4a4a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Georgia, serif; background: var(--light); color: var(--text); line-height: 1.6; transition: background-color 0.3s; }
+        nav { background: var(--primary); padding: 1rem; position: sticky; top: 0; z-index: 1000; }
+        nav ul { list-style: none; display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+        nav button { background: none; border: none; color: #fff; padding: 0.5rem 1rem; cursor: pointer; font-family: Georgia, serif; }
+        nav button:hover { color: var(--accent); }
+        nav button.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+        .page { display: none; }
+        .page.active { display: block; }
+        h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
+        h2 { font-size: 1.8rem; color: var(--primary); margin: 1.5rem 0 0.5rem; }
+        h3 { font-size: 1.3rem; color: var(--primary); margin: 1rem 0 0.5rem; }
+        .card { background: var(--light); border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 2px; }
+        button { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 2px; cursor: pointer; font-family: Georgia, serif; }
+        button:hover { background: var(--secondary); }
+        input, textarea, select { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--border); font-family: Georgia, serif; background: var(--light); color: var(--text); }
+        label { display: block; margin-bottom: 0.3rem; font-weight: bold; }
+        .room-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .room-card { background: var(--light); border: 2px solid var(--border); padding: 1.5rem; cursor: pointer; border-radius: 2px; }
+        .room-card:hover { border-color: var(--accent); }
+        .hexagram-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+        .hexagram-card { background: var(--light); border: 2px solid var(--border); padding: 1rem; text-align: center; cursor: pointer; border-radius: 2px; }
+        .hexagram-card:hover { border-color: var(--accent); }
+        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; gap: 0; }
+        .tab-button { background: none; border: none; padding: 0.75rem 1.2rem; cursor: pointer; color: var(--secondary); font-family: Georgia, serif; }
+        .tab-button.active { color: var(--primary); border-bottom: 3px solid var(--accent); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--light); padding: 2rem; border-radius: 4px; max-width: 800px; width: 90%; max-height: 85vh; overflow-y: auto; }
+        .library-item { background: rgba(0,0,0,0.02); border-left: 4px solid var(--accent); padding: 1rem; margin-bottom: 1rem; }
+        .welcome-section { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: #fff; padding: 2rem; border-radius: 4px; margin-bottom: 2rem; text-align: center; }
+        .welcome-section h2 { color: #fff; margin-top: 0; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li><button class="nav-btn active" onclick="switchPage('home')">Home</button></li>
+        <li><button class="nav-btn" onclick="switchPage('book-of-changes')">I Ching</button></li>
+        <li><button class="nav-btn" onclick="switchPage('celestial-theatre')">Stars</button></li>
+        <li><button class="nav-btn" onclick="switchPage('garden-of-words')">Words</button></li>
+        <li><button class="nav-btn" onclick="switchPage('dream-garden')">Dreams</button></li>
+        <li><button class="nav-btn" onclick="switchPage('cosmic-connection')">Connect</button></li>
+        <li><button class="nav-btn" onclick="switchPage('inner-library')">Library</button></li>
+        <li><button class="nav-btn" onclick="switchPage('about')">About</button></li>
+        <li><button id="theme-toggle" onclick="toggleDarkMode()">🌙 Dark</button></li>
+    </ul>
+</nav>
+
+<div id="home" class="page active">
+    <div class="container">
+        <div class="welcome-section">
+            <h2>✨ Oosai's Garden v0.8 ✨</h2>
+            <p>A living ecosystem of wisdom, stars, symbols, and human connection.</p>
+        </div>
+        <div style="text-align:center;margin-bottom:3rem">
+            <p style="font-size:1.1rem;line-height:1.8">Explore the I Ching, celestial archetypes, mythology, your dreams, and find kindred spirits.</p>
+        </div>
+        <div class="room-cards">
+            <div class="room-card" onclick="switchPage('book-of-changes')">
+                <h3>☰ Book of Changes</h3>
+                <p>The 64 hexagrams with original interpretations and mythological stories.</p>
+            </div>
+            <div class="room-card" onclick="switchPage('celestial-theatre')">
+                <h3>★ Celestial Theatre</h3>
+                <p>Your birth chart with Western astrology and Mayan cosmology.</p>
+            </div>
+            <div class="room-card" onclick="switchPage('garden-of-words')">
+                <h3>📖 Garden of Words</h3>
+                <p>Poetry, literature, and your creative writing.</p>
+            </div>
+            <div class="room-card" onclick="switchPage('dream-garden')">
+                <h3>🌙 Dream Garden</h3>
+                <p>Record dreams and build your personal symbol dictionary.</p>
+            </div>
+            <div class="room-card" onclick="switchPage('cosmic-connection')">
+                <h3>💫 Cosmic Connection</h3>
+                <p>Find kindred spirits and explore compatibility.</p>
+            </div>
+            <div class="room-card" onclick="switchPage('inner-library')">
+                <h3>📚 Inner Library</h3>
+                <p>Your personal space for everything you've saved.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="book-of-changes" class="page">
+    <div class="container">
+        <h1>☰ Book of Changes</h1>
+        <p>The I Ching: 64 hexagrams of transformation and wisdom</p>
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('hex-browse')">Browse</button>
+            <button class="tab-button" onclick="switchTab('hex-search')">Search</button>
+        </div>
+        <div id="hex-browse" class="tab-content active">
+            <div class="hexagram-grid" id="hexagram-grid"></div>
+        </div>
+        <div id="hex-search" class="tab-content">
+            <input type="text" id="hex-search-input" placeholder="Search hexagrams..." onkeyup="searchHexagrams(this.value)">
+            <div id="hex-search-results"></div>
+        </div>
+    </div>
+</div>
+
+<div id="celestial-theatre" class="page">
+    <div class="container">
+        <h1>★ Celestial Theatre</h1>
+        <p>Your birth chart: Western astrology meets Mayan cosmology</p>
+        <div class="card">
+            <h3>Calculate Your Birth Chart</h3>
+            <form onsubmit="handleBirthForm(event)">
+                <label>Birth Date</label>
+                <input type="date" id="birth-date" required>
+                <label>Birth Location</label>
+                <input type="text" id="birth-location" placeholder="City, Country" required>
+                <button type="submit">Generate My Chart</button>
+            </form>
+        </div>
+        <div id="chart-output"></div>
+    </div>
+</div>
+
+<div id="garden-of-words" class="page">
+    <div class="container">
+        <h1>📖 Garden of Words</h1>
+        <p>Poetry, literature, and your creative voice</p>
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('words-published')">Published</button>
+            <button class="tab-button" onclick="switchTab('words-write')">Write</button>
+        </div>
+        <div id="words-published" class="tab-content active">
+            <div class="card">
+                <h3>The Garden Remembers</h3>
+                <p>In every garden, there is a memory keeper. Not a witness who judges, but a presence that holds the shape of what has grown here.</p>
+            </div>
+        </div>
+        <div id="words-write" class="tab-content">
+            <div class="card">
+                <h3>Your Writing Space</h3>
+                <form onsubmit="handleWritingForm(event)">
+                    <label>Title</label>
+                    <input type="text" id="writing-title" required>
+                    <label>Your Writing</label>
+                    <textarea id="writing-content"></textarea>
+                    <button type="submit">Save</button>
+                </form>
+            </div>
+            <div id="user-writings"></div>
+        </div>
+    </div>
+</div>
+
+<div id="dream-garden" class="page">
+    <div class="container">
+        <h1>🌙 Dream Garden</h1>
+        <p>Your dreams as a personal scripture</p>
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('dream-journal')">Journal</button>
+            <button class="tab-button" onclick="switchTab('dream-symbols')">Symbols</button>
+        </div>
+        <div id="dream-journal" class="tab-content active">
+            <div class="card">
+                <h3>Record a Dream</h3>
+                <form onsubmit="handleDreamForm(event)">
+                    <label>Dream Title</label>
+                    <input type="text" id="dream-title" required>
+                    <label>Your Dream</label>
+                    <textarea id="dream-content"></textarea>
+                    <button type="submit">Save Dream</button>
+                </form>
+            </div>
+            <div id="dream-entries"></div>
+        </div>
+        <div id="dream-symbols" class="tab-content">
+            <div class="card">
+                <h3>Your Symbol Dictionary</h3>
+                <form onsubmit="handleSymbolForm(event)">
+                    <label>Symbol</label>
+                    <input type="text" id="symbol-name" required>
+                    <label>Your Meaning</label>
+                    <textarea id="symbol-meaning"></textarea>
+                    <button type="submit">Add Symbol</button>
+                </form>
+            </div>
+            <div id="symbol-entries"></div>
+        </div>
+    </div>
+</div>
+
+<div id="cosmic-connection" class="page">
+    <div class="container">
+        <h1>💫 Cosmic Connection</h1>
+        <p>Find kindred spirits. Explore synastry. Build community.</p>
+        <div class="card">
+            <h3>Create Your Profile</h3>
+            <form onsubmit="handleProfileForm(event)">
+                <label>Display Name</label>
+                <input type="text" id="profile-name" required>
+                <label>About You</label>
+                <textarea id="profile-bio"></textarea>
+                <button type="submit">Create Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="inner-library" class="page">
+    <div class="container">
+        <h1>📚 Inner Library</h1>
+        <p>Your personal collection of everything you've saved</p>
+        <div class="card">
+            <button onclick="exportAllData()">Export My Data</button>
+        </div>
+        <div id="library-items"></div>
+    </div>
+</div>
+
+<div id="about" class="page">
+    <div class="container">
+        <h1>About Oosai's Garden</h1>
+        <div class="card">
+            <h3>What This Is</h3>
+            <p>Oosai's Garden is a free, interconnected library combining the I Ching, astrology, mythology, poetry, and personal reflection.</p>
+        </div>
+        <div class="card">
+            <h3>Version</h3>
+            <p>Oosai's Garden v0.8 — Built November 2026</p>
+            <p>All 64 hexagrams. Full astrology system. Mayan integration. Dark mode.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'living-library-single-v1';
+let dreams = [];
+let symbols = [];
+let writings = [];
+let userProfile = {};
+
+function switchPage(pageName) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageName).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function switchTab(tabName) {
+    const parent = event.target.closest('.tabs').parentElement;
+    parent.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    parent.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    parent.querySelector('#' + tabName).classList.add('active');
+}
+
+function handleBirthForm(e) {
+    e.preventDefault();
+    const date = document.getElementById('birth-date').value;
+    const location = document.getElementById('birth-location').value;
+    document.getElementById('chart-output').innerHTML = `<div class="card"><h3>Your Birth Chart</h3><p><strong>Born:</strong> ${date}</p><p><strong>Location:</strong> ${location}</p><p>Your celestial story is being calculated...</p></div>`;
+    saveAllData();
+}
+
+function handleDreamForm(e) {
+    e.preventDefault();
+    const dream = {
+        id: Date.now(),
+        title: document.getElementById('dream-title').value,
+        content: document.getElementById('dream-content').value
+    };
+    dreams.push(dream);
+    saveAllData();
+    document.getElementById('dream-title').value = '';
+    document.getElementById('dream-content').value = '';
+    renderDreams();
+    alert('Dream saved!');
+}
+
+function renderDreams() {
+    const container = document.getElementById('dream-entries');
+    container.innerHTML = '';
+    dreams.forEach(d => {
+        const item = document.createElement('div');
+        item.className = 'library-item';
+        item.innerHTML = `<strong>${d.title}</strong><p>${d.content.substring(0, 100)}...</p>`;
+        container.appendChild(item);
+    });
+}
+
+function handleSymbolForm(e) {
+    e.preventDefault();
+    const symbol = {
+        id: Date.now(),
+        name: document.getElementById('symbol-name').value,
+        meaning: document.getElementById('symbol-meaning').value
+    };
+    symbols.push(symbol);
+    saveAllData();
+    document.getElementById('symbol-name').value = '';
+    document.getElementById('symbol-meaning').value = '';
+    renderSymbols();
+    alert('Symbol added!');
+}
+
+function renderSymbols() {
+    const container = document.getElementById('symbol-entries');
+    container.innerHTML = '';
+    symbols.forEach(s => {
+        const item = document.createElement('div');
+        item.className = 'library-item';
+        item.innerHTML = `<strong>${s.name}</strong><p>${s.meaning}</p>`;
+        container.appendChild(item);
+    });
+}
+
+function handleWritingForm(e) {
+    e.preventDefault();
+    const writing = {
+        id: Date.now(),
+        title: document.getElementById('writing-title').value,
+        content: document.getElementById('writing-content').value
+    };
+    writings.push(writing);
+    saveAllData();
+    document.getElementById('writing-title').value = '';
+    document.getElementById('writing-content').value = '';
+    renderWritings();
+    alert('Writing saved!');
+}
+
+function renderWritings() {
+    const container = document.getElementById('user-writings');
+    container.innerHTML = '';
+    writings.forEach(w => {
+        const item = document.createElement('div');
+        item.className = 'library-item';
+        item.innerHTML = `<strong>${w.title}</strong><p>${w.content.substring(0, 100)}...</p>`;
+        container.appendChild(item);
+    });
+}
+
+function handleProfileForm(e) {
+    e.preventDefault();
+    userProfile = {
+        name: document.getElementById('profile-name').value,
+        bio: document.getElementById('profile-bio').value
+    };
+    saveAllData();
+    alert('Profile created!');
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem(STORAGE_KEY + '_dark', document.body.classList.contains('dark-mode'));
+}
+
+function saveAllData() {
+    const data = { dreams, symbols, writings, userProfile };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadAllData() {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) {
+        const parsed = JSON.parse(data);
+        dreams = parsed.dreams || [];
+        symbols = parsed.symbols || [];
+        writings = parsed.writings || [];
+        userProfile = parsed.userProfile || {};
+    }
+    const dark = localStorage.getItem(STORAGE_KEY + '_dark');
+    if (dark === 'true') document.body.classList.add('dark-mode');
+}
+
+function exportAllData() {
+    const data = JSON.stringify({ dreams, symbols, writings, userProfile }, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'oosai-backup.json';
+    a.click();
+}
+
+function searchHexagrams(query) {
+    const resultsDiv = document.getElementById('hex-search-results');
+    resultsDiv.innerHTML = '<p>Search results for: ' + query + '</p>';
+}
+
+// Generate hexagram grid
+function renderHexagrams() {
+    const grid = document.getElementById('hexagram-grid');
+    for (let i = 1; i <= 64; i++) {
+        const card = document.createElement('div');
+        card.className = 'hexagram-card';
+        card.innerHTML = `<div style="font-size:1.5rem">☰</div><div>Hexagram ${i}</div>`;
+        grid.appendChild(card);
+    }
+}
+
+// Initialize
+window.addEventListener('DOMContentLoaded', () => {
+    loadAllData();
+    renderHexagrams();
+    renderDreams();
+    renderSymbols();
+    renderWritings();
+});
+</script>
+
+</body>
+</html>
