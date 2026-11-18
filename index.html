@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oosai's Garden v0.9</title>
+    <style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--primary:#1a3a1a;--secondary:#8b6f47;--accent:#d4a574;--light:#faf8f5;--text:#1a1a1a}body{font-family:Georgia,serif;background:var(--light);color:var(--text);line-height:1.7}body.dark-mode{--light:#0f1419;--text:#faf8f5}nav{background:var(--primary);padding:1.2rem 2rem;position:sticky;top:0;z-index:1000}nav ul{list-style:none;display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center}nav button{background:0;border:none;color:#fff;padding:0.6rem 1.2rem;cursor:pointer;font-family:Georgia,serif;font-size:0.85rem;transition:all 0.3s}nav button:hover{color:var(--accent)}nav button.active{background:var(--accent);color:var(--primary)}.container{max-width:1400px;margin:0 auto;padding:3rem 2rem}.page{display:none}.page.active{display:block}h1{font-size:3rem;color:var(--primary);margin-bottom:1rem}h2{font-size:2rem;color:var(--primary);margin:1.5rem 0 1rem}h3{font-size:1.3rem;color:var(--primary);margin:1rem 0 0.5rem}.tagline{font-size:1.1rem;color:var(--secondary);font-style:italic;margin-bottom:2rem}.card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:2rem;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s}body.dark-mode .card{background:#1a1a1a;border-color:#333}.card:hover{box-shadow:0 8px 20px rgba(0,0,0,0.15)}button{background:linear-gradient(135deg,var(--primary),#6b8e6f);color:#fff;border:none;padding:0.9rem 1.8rem;border-radius:25px;cursor:pointer;font-family:Georgia,serif;font-size:0.95rem;transition:all 0.3s}button:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(26,58,26,0.3)}input,textarea,select{width:100%;padding:1rem;margin-bottom:1.2rem;border:2px solid var(--accent);border-radius:8px;font-family:Georgia,serif;background:#fff;color:var(--text)}body.dark-mode input,body.dark-mode textarea,body.dark-mode select{background:#1a1a1a;border-color:#666}input:focus,textarea:focus{outline:0;border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,58,26,0.1)}label{display:block;margin-bottom:0.5rem;font-weight:600;color:var(--primary)}.welcome-section{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:3rem 2rem;border-radius:16px;margin-bottom:3rem;text-align:center}.welcome-section h2{color:#fff;margin-top:0}.room-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;margin:2rem 0}.room-card{background:#fff;border:2px solid transparent;border-radius:12px;padding:2rem;cursor:pointer;transition:all 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.1)}.room-card:hover{border-color:var(--accent);transform:translateY(-8px);box-shadow:0 8px 20px rgba(0,0,0,0.15)}.room-card-icon{font-size:3rem;margin-bottom:1rem}.room-card-title{font-size:1.3rem;color:var(--primary);margin-bottom:0.8rem;font-weight:600}.room-card-desc{font-size:0.95rem;color:var(--secondary);line-height:1.6}.hexagram-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1.2rem;margin:2rem 0}.hexagram-card{background:#fff;border:2px solid var(--accent);border-radius:10px;padding:1.2rem;text-align:center;cursor:pointer;transition:all 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.08)}body.dark-mode .hexagram-card{background:#1a1a1a}.hexagram-card:hover{border-color:var(--primary);transform:scale(1.08) translateY(-5px);box-shadow:0 8px 20px rgba(0,0,0,0.15)}.hexagram-symbol{font-size:2.5rem;margin:0.5rem 0;font-weight:700}.hexagram-name{font-weight:600;color:var(--primary);margin-bottom:0.3rem;font-size:0.9rem}.hexagram-number{font-size:0.75rem;color:var(--secondary)}.tabs{display:flex;border-bottom:3px solid var(--accent);margin-bottom:2rem;gap:0;overflow-x:auto}.tab-button{background:0;border:none;padding:1rem 1.8rem;cursor:pointer;color:var(--secondary);border-bottom:4px solid transparent;transition:all 0.3s;font-size:0.95rem;text-transform:uppercase;letter-spacing:1px;font-weight:600;white-space:nowrap;font-family:Georgia,serif;margin-bottom:-3px}.tab-button:hover{color:var(--primary);background:rgba(26,58,26,0.05)}.tab-button.active{color:var(--primary);border-bottom-color:var(--primary);background:rgba(26,58,26,0.08)}.tab-content{display:none}.tab-content.active{display:block}.modal{display:none;position:fixed;z-index:3000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;padding:1rem}.modal.active{display:flex}.modal-content{background:#fff;border-radius:16px;padding:2.5rem;max-width:900px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)}body.dark-mode .modal-content{background:#1a1a1a}.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:2px solid var(--accent)}.modal-header h2{margin:0}.modal-close{background:0;border:none;font-size:2rem;cursor:pointer;color:var(--primary);padding:0;width:auto;box-shadow:0;transition:all 0.3s}.modal-close:hover{color:var(--accent);transform:rotate(90deg)}.search-input{width:100%;padding:1.2rem;font-size:1rem;border:2px solid var(--accent);border-radius:25px;margin-bottom:1.5rem}.library-item{background:rgba(26,58,26,0.05);border-left:5px solid var(--accent);padding:1.5rem;margin-bottom:1.2rem;border-radius:8px;cursor:pointer;transition:all 0.3s;position:relative}body.dark-mode .library-item{background:rgba(139,111,71,0.1)}.library-item:hover{transform:translateX(8px);box-shadow:0 4px 15px rgba(0,0,0,0.1)}.library-item-title{font-weight:700;color:var(--primary);margin-bottom:0.5rem}.library-item-meta{font-size:0.8rem;color:var(--secondary);margin-top:0.5rem}.library-item-buttons{display:flex;gap:0.5rem;margin-top:1rem}.library-item-buttons button{padding:0.5rem 1rem;font-size:0.85rem;width:auto}.delete-btn{background:linear-gradient(135deg,#8b4545,#c65d5d);font-size:0.8rem;padding:0.4rem 0.8rem}.section{margin:2rem 0;padding-bottom:1rem;border-bottom:1px solid var(--accent)}.section-title{font-size:1.2rem;color:var(--primary);margin-bottom:1rem;font-weight:600}.stat-box{background:rgba(26,58,26,0.08);border:2px solid var(--accent);padding:1.5rem;text-align:center;border-radius:10px;margin-bottom:1.5rem}.stat-number{font-size:2rem;font-weight:700;color:var(--accent)}.stat-label{font-size:0.9rem;color:var(--secondary);margin-top:0.5rem}.success-message{background:#d4edda;border:1px solid #c3e6cb;color:#155724;padding:1rem;border-radius:8px;margin-bottom:1rem;display:none}.success-message.show{display:block}.error-message{background:#f8d7da;border:1px solid #f5c6cb;color:#721c24;padding:1rem;border-radius:8px;margin-bottom:1rem;display:none}.error-message.show{display:block}@media (max-width:768px){h1{font-size:1.8rem}.container{padding:1.5rem 1rem}.room-cards{grid-template-columns:1fr}.hexagram-grid{grid-template-columns:repeat(2,1fr)}.library-item-buttons{flex-direction:column}}
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li><button class="nav-btn active" data-page="home" onclick="switchPage(event)">🏡 Home</button></li>
+        <li><button class="nav-btn" data-page="book-of-changes" onclick="switchPage(event)">☰ I Ching</button></li>
+        <li><button class="nav-btn" data-page="celestial-theatre" onclick="switchPage(event)">★ Stars</button></li>
+        <li><button class="nav-btn" data-page="garden-of-words" onclick="switchPage(event)">📖 Words</button></li>
+        <li><button class="nav-btn" data-page="dream-garden" onclick="switchPage(event)">🌙 Dreams</button></li>
+        <li><button class="nav-btn" data-page="cosmic-connection" onclick="switchPage(event)">💫 Connect</button></li>
+        <li><button class="nav-btn" data-page="inner-library" onclick="switchPage(event)">📚 Library</button></li>
+        <li><button class="nav-btn" data-page="about" onclick="switchPage(event)">ℹ️ About</button></li>
+        <li><button id="theme-toggle" onclick="toggleDarkMode()">🌙 Dark</button></li>
+    </ul>
+</nav>
+
+<div id="home" class="page active">
+    <div class="container">
+        <div class="welcome-section">
+            <h2>✨ Oosai's Garden v0.9 ✨</h2>
+            <p>A living ecosystem of wisdom, stars, symbols, and human connection</p>
+        </div>
+        <div style="text-align:center;margin-bottom:3rem">
+            <p style="font-size:1.1rem;line-height:1.9">Explore the 64 hexagrams. Calculate your birth chart. Record your dreams. Find kindred spirits.</p>
+        </div>
+        <div class="room-cards">
+            <div class="room-card" onclick="switchPageById('book-of-changes')">
+                <div class="room-card-icon">☰</div>
+                <div class="room-card-title">Book of Changes</div>
+                <div class="room-card-desc">All 64 hexagrams with original essays, archetypes, and mythological stories.</div>
+            </div>
+            <div class="room-card" onclick="switchPageById('celestial-theatre')">
+                <div class="room-card-icon">★</div>
+                <div class="room-card-title">Celestial Theatre</div>
+                <div class="room-card-desc">Your birth chart with Western astrology and Mayan cosmology.</div>
+            </div>
+            <div class="room-card" onclick="switchPageById('garden-of-words')">
+                <div class="room-card-icon">📖</div>
+                <div class="room-card-title">Garden of Words</div>
+                <div class="room-card-desc">Poetry, philosophy, and literature from world traditions.</div>
+            </div>
+            <div class="room-card" onclick="switchPageById('dream-garden')">
+                <div class="room-card-icon">🌙</div>
+                <div class="room-card-title">Dream Garden</div>
+                <div class="room-card-desc">Record dreams and discover their patterns and meanings.</div>
+            </div>
+            <div class="room-card" onclick="switchPageById('cosmic-connection')">
+                <div class="room-card-icon">💫</div>
+                <div class="room-card-title">Cosmic Connection</div>
+                <div class="room-card-desc">Create a profile and find kindred spirits.</div>
+            </div>
+            <div class="room-card" onclick="switchPageById('inner-library')">
+                <div class="room-card-icon">📚</div>
+                <div class="room-card-title">Inner Library</div>
+                <div class="room-card-desc">Your personal space. Organize. Save. Export.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="book-of-changes" class="page">
+    <div class="container">
+        <h1>☰ Book of Changes</h1>
+        <p class="tagline">The I Ching: 64 hexagrams of transformation</p>
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab(event,'hex-browse')">Browse</button>
+            <button class="tab-button" onclick="switchTab(event,'hex-search')">Search</button>
+            <button class="tab-button" onclick="switchTab(event,'hex-daily')">Today</button>
+        </div>
+        <div id="hex-browse" class="tab-content active">
+            <div class="hexagram-grid" id="hexagram-grid"></div>
+        </div>
+        <div id="hex-search" class="tab-content">
+            <input type="text" class="search-input" placeholder="Search hexagrams..." onkeyup="searchHexagrams(this.value)">
+            <div id="hex-search-results"></div>
+        </div>
+        <div id="hex-daily" class="tab-content">
+            <div id="daily-hex-content"></div>
+        </div>
+    </div>
+</div>
+
+<div id="celestial-theatre" class="page">
+    <div class="container">
+        <h1>★ Celestial Theatre</h1>
+        <p class="tagline">Your birth chart: Western astrology meets Mayan cosmology</p>
+        <div class="card">
+            <h3>Calculate Your Birth Chart</h3>
+            <div class="success-message" id="chart-success"></div>
+            <form onsubmit="handleBirthForm(event)">
+                <label>Birth Date *</label>
+                <input type="date" id="birth-date" required>
+                <label>Birth Time (optional)</label>
+                <input type="time" id="birth-time">
+                <label>Birth Location (City, Country) *</label>
+                <input type="text" id="birth-location" placeholder="e.g., London, UK" required>
+                <button type="submit">Generate My Chart</button>
+            </form>
+        </div>
+        <div id="chart-output"></div>
+    </div>
+</div>
+
+<div id="garden-of-words" class="page">
+    <div class="container">
+        <h1>📖 Garden of Words</h1>
+        <p class="tagline">Poetry, philosophy, and literature</p>
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab(event,'collections')">Collections</button>
+            <button class="tab-button" onclick="switchTab(event,'your-writings')">Your Writings</button>
+        </div>
+        <div id="collections" class="tab-content active">
+            <div class="card">
+                <h3>Curated Collections</h3>
+                <p style="color:var(--secondary);margin-bottom:1.5rem">Explore poetry, philosophy, and literature from world traditions.</p>
+                <ul style="margin-left:1.5rem;line-height:2">
+                    <li><strong>Poetry & Verse</strong> - Rumi, Hafiz, Mary Oliver, contemporary voices</li>
+                    <li><strong>Philosophy & Wisdom</strong> - Eastern and Western philosophical traditions</li>
+                    <li><strong>Mythology & Stories</strong> - World myths and archetypal narratives</li>
+                    <li><strong>Spiritual Traditions</strong> - Buddhism, Taoism, Sufism, and more</li>
+                </ul>
+            </div>
+        </div>
+        <div id="your-writings" class="tab-content">
+            <div class="card">
+                <h3>Your Writing Space</h3>
+                <div class="success-message" id="writing-success"></div>
+                <form onsubmit="handleWritingForm(event)">
+                    <label>Title</label>
+                    <input type="text" id="writing-title" placeholder="Give your piece a name" required>
+                    <label>Your Writing</label>
+                    <textarea id="writing-content" placeholder="Write freely..." required style="min-height:150px"></textarea>
+                    <button type="submit">Save</button>
+                </form>
+            </div>
+            <input type="text" class="search-input" id="writing-search" placeholder="Search your writings..." onkeyup="searchWritings(this.value)">
+            <div id="user-writings-list"></div>
+        </div>
+    </div>
+</div>
+
+<div id="dream-garden" class="page">
+    <div class="container">
+        <h1>🌙 Dream Garden</h1>
+        <p class="tagline">Your dreams as a personal scripture</p>
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab(event,'dream-journal')">Journal</button>
+            <button class="tab-button" onclick="switchTab(event,'dream-symbols')">Symbols</button>
+            <button class="tab-button" onclick="switchTab(event,'dream-analysis')">Analysis</button>
+        </div>
+        <div id="dream-journal" class="tab-content active">
+            <div class="card">
+                <h3>Record Your Dream</h3>
+                <div class="success-message" id="dream-success"></div>
+                <form onsubmit="handleDreamForm(event)">
+                    <label>Date</label>
+                    <input type="date" id="dream-date">
+                    <label>Dream Title</label>
+                    <input type="text" id="dream-title" placeholder="Name your dream" required>
+                    <label>Your Dream</label>
+                    <textarea id="dream-content" placeholder="What do you remember?" required style="min-height:150px"></textarea>
+                    <label>Emotions (comma separated)</label>
+                    <input type="text" id="dream-emotions" placeholder="e.g., wonder, fear, peace">
+                    <label>Key Symbols (comma separated)</label>
+                    <input type="text" id="dream-symbols" placeholder="e.g., water, bird, house">
+                    <button type="submit">Save Dream</button>
+                </form>
+            </div>
+            <input type="text" class="search-input" id="dream-search" placeholder="Search your dreams..." onkeyup="searchDreams(this.value)">
+            <div id="dream-entries-list"></div>
+        </div>
+        <div id="dream-symbols" class="tab-content">
+            <div class="card">
+                <h3>Your Symbol Dictionary</h3>
+                <div class="success-message" id="symbol-success"></div>
+                <form onsubmit="handleSymbolForm(event)">
+                    <label>Symbol</label>
+                    <input type="text" id="symbol-name" placeholder="e.g., water, bird" required>
+                    <label>Your Meaning</label>
+                    <textarea id="symbol-meaning" placeholder="What does this mean to you?" required style="min-height:100px"></textarea>
+                    <button type="submit">Add Symbol</button>
+                </form>
+            </div>
+            <input type="text" class="search-input" id="symbol-search" placeholder="Search symbols..." onkeyup="searchSymbols(this.value)">
+            <div id="symbol-entries-list"></div>
+        </div>
+        <div id="dream-analysis" class="tab-content">
+            <div id="dream-analysis-output"></div>
+        </div>
+    </div>
+</div>
+
+<div id="cosmic-connection" class="page">
+    <div class="container">
+        <h1>💫 Cosmic Connection</h1>
+        <p class="tagline">Find kindred spirits. Build community.</p>
+        <div class="card" id="profile-form-container">
+            <h3>Create Your Profile</h3>
+            <div class="success-message" id="profile-success"></div>
+            <form onsubmit="handleProfileForm(event)">
+                <label>Display Name *</label>
+                <input type="text" id="profile-name" placeholder="How you want to be known" required>
+                <label>About You</label>
+                <textarea id="profile-bio" placeholder="Tell others about yourself" style="min-height:100px"></textarea>
+                <label>What spiritual traditions call to you?</label>
+                <textarea id="profile-spirituality" placeholder="e.g., Buddhism, astrology, mysticism" style="min-height:80px"></textarea>
+                <label>What are you looking for?</label>
+                <select id="profile-seeking" required>
+                    <option value="">Select...</option>
+                    <option value="friendship">Friendship</option>
+                    <option value="romantic">Romantic Connection</option>
+                    <option value="community">Community</option>
+                    <option value="open">Open to What Emerges</option>
+                </select>
+                <button type="submit">Create Profile</button>
+            </form>
+        </div>
+        <div id="profile-display" style="display:none">
+            <div class="card">
+                <h3>Your Profile</h3>
+                <div id="profile-content"></div>
+                <button onclick="editProfile()">Edit Profile</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="inner-library" class="page">
+    <div class="container">
+        <h1>📚 Inner Library</h1>
+        <p class="tagline">Your personal collection</p>
+        <div class="card">
+            <button onclick="exportAllData()" style="width:100%">📥 Download My Data</button>
+            <p style="margin-top:1rem;font-size:0.9rem;color:var(--secondary)">Export all your dreams, writings, and profile as JSON.</p>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="library-count">0</div>
+            <div class="stat-label">Total Entries</div>
+        </div>
+        <div id="library-items"></div>
+    </div>
+</div>
+
+<div id="about" class="page">
+    <div class="container">
+        <h1>About Oosai's Garden</h1>
+        <div class="card">
+            <h3>What This Is</h3>
+            <p>Oosai's Garden is a free, interconnected library combining the I Ching, astrology, mythology, poetry, and personal reflection.</p>
+        </div>
+        <div class="card">
+            <h3>Key Features</h3>
+            <ul style="margin-left:1.5rem;line-height:2">
+                <li>All 64 hexagrams with original essays and archetypes</li>
+                <li>Birth chart calculation with Western and Mayan astrology</li>
+                <li>Dream journal and symbol dictionary</li>
+                <li>Curated collections of poetry and philosophy</li>
+                <li>Profile creation and community connection</li>
+                <li>Complete data export and backup</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Version</h3>
+            <p><strong>Oosai's Garden v0.9</strong> — November 2026</p>
+            <p style="margin-top:1rem;color:var(--secondary);font-size:0.9rem">Free • No paywalls • No tracking • Your data stays with you</p>
+        </div>
+    </div>
+</div>
+
+<div id="hexagram-modal" class="modal" onclick="closeModalOnBackdrop(event, 'hexagram-modal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h2 id="hex-modal-title"></h2>
+            <button class="modal-close" onclick="closeModal('hexagram-modal')">×</button>
+        </div>
+        <div id="hex-modal-body" style="max-height:60vh;overflow-y:auto"></div>
+    </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'living-library-single-v1';
+
+const HEXAGRAMS = [
+    {n:1,name:"The Creative",ar:"The Creator",se:"Creative force initiates all things",pr:"Cosmic becoming through creative expression",tr:"Initiating power"},
+    {n:2,name:"The Receptive",ar:"The Nurturer",se:"Openness receives and nurtures",pr:"Nourishment through receptivity",tr:"Generativity"},
+    {n:3,name:"Difficulty at Beginning",ar:"The Emergence",se:"Emergence from chaos and confusion",pr:"Perseverance through difficulty",tr:"Flourishing"},
+    {n:4,name:"Youthful Folly",ar:"The Innocent",se:"Innocence and inexperience",pr:"Learning through guidance",tr:"Wisdom"},
+    {n:5,name:"Waiting",ar:"The Waiter",se:"Potential held in abeyance",pr:"Preparing for right timing",tr:"Right timing"},
+    {n:6,name:"Conflict",ar:"The Warrior",se:"Disagreement and opposition",pr:"Resolution through understanding",tr:"Understanding"},
+    {n:7,name:"The Army",ar:"The Leader",se:"Force and military strength",pr:"Leadership with purpose",tr:"Purpose"},
+    {n:8,name:"Holding Together",ar:"The Community",se:"Connection and unity",pr:"Belonging to something greater",tr:"Interdependence"},
+    {n:9,name:"Small Taming",ar:"The Cultivator",se:"Restraint and gentle influence",pr:"Influence through cultivation",tr:"Power"},
+    {n:10,name:"Treading",ar:"The Courageous",se:"Passage and stepping forward",pr:"Courage in action",tr:"Integrity"},
+    {n:11,name:"Peace",ar:"The Harmonizer",se:"Exchange and flow between states",pr:"Flow and natural progression",tr:"Harmony"},
+    {n:12,name:"Standstill",ar:"The Paused",se:"Stagnation and blockage",pr:"Pause as necessity",tr:"Clearing"},
+    {n:13,name:"Fellowship",ar:"The Communion",se:"Purpose and gathering",pr:"Fellowship in shared vision",tr:"Communion"},
+    {n:14,name:"Great Possession",ar:"The Steward",se:"Abundance and wealth",pr:"Stewardship of resources",tr:"Service"},
+    {n:15,name:"Modesty",ar:"The Humble",se:"Humility and restraint",pr:"Strength through humility",tr:"Power"},
+    {n:16,name:"Enthusiasm",ar:"The Awakener",se:"Inspiration and arousal",pr:"Inspiration as transmission",tr:"Transmission"},
+    {n:17,name:"Following",ar:"The Follower",se:"Movement and flow",pr:"Following with awareness",tr:"Dancing"},
+    {n:18,name:"Work on Spoiled",ar:"The Healer",se:"Corruption requiring repair",pr:"Healing through attention",tr:"Healing"},
+    {n:19,name:"Approach",ar:"The Receiver",se:"Opening and arrival",pr:"Opportunity knocking",tr:"Readiness"},
+    {n:20,name:"Contemplation",ar:"The Seer",se:"Observation and reflection",pr:"Insight through stillness",tr:"Wisdom"},
+    {n:21,name:"Biting Through",ar:"The Judge",se:"Separation and judgment",pr:"Justice and clarity",tr:"Clarity"},
+    {n:22,name:"Grace",ar:"The Artist",se:"Beauty and elegance",pr:"Beauty as revelation",tr:"Radiance"},
+    {n:23,name:"Splitting Apart",ar:"The Release",se:"Dissolution and ending",pr:"Release and surrender",tr:"Clearing"},
+    {n:24,name:"Return",ar:"The Renewer",se:"Turning and cycling",pr:"Movement and renewal",tr:"Becoming"},
+    {n:25,name:"Innocence",ar:"The Sincere",se:"Authenticity and truth",pr:"Sincerity in action",tr:"Alignment"},
+    {n:26,name:"Great Taming",ar:"The Cultivator",se:"Strength and discipline",pr:"Taming through practice",tr:"Mastery"},
+    {n:27,name:"Nourishment",ar:"The Feeder",se:"Sustenance and care",pr:"Nourishing oneself and others",tr:"Wisdom"},
+    {n:28,name:"Great Preponderance",ar:"The Transformer",se:"Burden and weight",pr:"Pressure as catalyst",tr:"Grace"},
+    {n:29,name:"The Abysmal",ar:"The Deepener",se:"Danger and depth",pr:"Steadiness in crisis",tr:"Wisdom"},
+    {n:30,name:"The Clinging",ar:"The Illuminator",se:"Clarity and light",pr:"Light as consciousness",tr:"Consciousness"},
+    {n:31,name:"Influence",ar:"The Attracted",se:"Mutual attraction",pr:"Influence through presence",tr:"Resonance"},
+    {n:32,name:"Duration",ar:"The Sustainer",se:"Continuity and persistence",pr:"Endurance through change",tr:"Stability"},
+    {n:33,name:"Retreat",ar:"The Wise Withdrawer",se:"Withdrawal and retreat",pr:"Strategic retreat",tr:"Wisdom"},
+    {n:34,name:"Great Power",ar:"The Mighty",se:"Strength and vigor",pr:"Power with integrity",tr:"Strength"},
+    {n:35,name:"Progress",ar:"The Ascending",se:"Advancement and growth",pr:"Progress toward light",tr:"Transcendence"},
+    {n:36,name:"Darkening of the Light",ar:"The Obscured",se:"Concealment and hiding",pr:"Wisdom in darkness",tr:"Transformation"},
+    {n:37,name:"The Family",ar:"The Bonded",se:"Family and home",pr:"Family as foundation",tr:"Love"},
+    {n:38,name:"Opposition",ar:"The Divided",se:"Separation and contrast",pr:"Finding unity in difference",tr:"Paradox"},
+    {n:39,name:"Obstruction",ar:"The Blocked",se:"Obstacles and difficulty",pr:"Moving through resistance",tr:"Perseverance"},
+    {n:40,name:"Deliverance",ar:"The Freed",se:"Release and solution",pr:"Freedom through resolution",tr:"Liberation"},
+    {n:41,name:"Decrease",ar:"The Released",se:"Reduction and simplification",pr:"Decrease as liberation",tr:"Freedom"},
+    {n:42,name:"Increase",ar:"The Abundant",se:"Growth and expansion",pr:"Increase through giving",tr:"Abundance"},
+    {n:43,name:"Breakthrough",ar:"The Erupting",se:"Explosion and resolution",pr:"Breaking through resistance",tr:"Breakthrough"},
+    {n:44,name:"Coming to Meet",ar:"The Encountered",se:"Meeting and encounter",pr:"Encounter with the unexpected",tr:"Synchronicity"},
+    {n:45,name:"Gathering Together",ar:"The Assembled",se:"Assembly and gathering",pr:"Gathering in purpose",tr:"Unity"},
+    {n:46,name:"Pushing Upward",ar:"The Rising",se:"Growth upward",pr:"Growth through effort",tr:"Ascension"},
+    {n:47,name:"Oppression",ar:"The Pressed",se:"Exhaustion and pressure",pr:"Persistence through oppression",tr:"Strength"},
+    {n:48,name:"The Well",ar:"The Deep",se:"Nourishment from depths",pr:"Sustenance and renewal",tr:"Wisdom"},
+    {n:49,name:"Revolution",ar:"The Transformed",se:"Transformation and change",pr:"Change as renewal",tr:"Transformation"},
+    {n:50,name:"The Cauldron",ar:"The Transmuted",se:"Transformation of essence",pr:"Nourishment through transformation",tr:"Alchemy"},
+    {n:51,name:"The Arousing",ar:"The Awakened",se:"Shock and awakening",pr:"Awakening to truth",tr:"Enlightenment"},
+    {n:52,name:"Keeping Still",ar:"The Stilled",se:"Stillness and rest",pr:"Rest as wisdom",tr:"Peace"},
+    {n:53,name:"Development",ar:"The Growing",se:"Gradual growth",pr:"Development through patience",tr:"Maturity"},
+    {n:54,name:"The Marrying Maiden",ar:"The Wedded",se:"Marriage and union",pr:"Union in integrity",tr:"Love"},
+    {n:55,name:"Abundance",ar:"The Abundant",se:"Fullness and prosperity",pr:"Abundance as moment",tr:"Prosperity"},
+    {n:56,name:"The Wanderer",ar:"The Journeyer",se:"Travel and displacement",pr:"Journey as teaching",tr:"Pilgrimage"},
+    {n:57,name:"The Gentle",ar:"The Penetrating",se:"Penetration and gentleness",pr:"Gentle persistence",tr:"Influence"},
+    {n:58,name:"The Joyous",ar:"The Delighted",se:"Joy and pleasure",pr:"Joy as natural state",tr:"Happiness"},
+    {n:59,name:"Dispersion",ar:"The Scattered",se:"Dissolution and dispersal",pr:"Dispersion as liberation",tr:"Freedom"},
+    {n:60,name:"Limitation",ar:"The Bounded",se:"Boundaries and structure",pr:"Limitation as freedom",tr:"Order"},
+    {n:61,name:"Inner Truth",ar:"The Truthful",se:"Truth and sincerity",pr:"Inner truth as power",tr:"Authenticity"},
+    {n:62,name:"Preponderance of Small",ar:"The Small",se:"Small things matter",pr:"Attention to detail",tr:"Grace"},
+    {n:63,name:"After Completion",ar:"The Completed",se:"Completion and endings",pr:"Completion as beginning",tr:"Fulfillment"},
+    {n:64,name:"Before Completion",ar:"The Unfinished",se:"Incompletion and potential",pr:"Potential as power",tr:"Promise"}
+];
+
+let userData = {dreams:[],symbols:[],writings:[],profile:null};
+
+function switchPage(event){
+    event.preventDefault();
+    const pageId = event.target.dataset.page;
+    switchPageById(pageId);
+}
+
+function switchPageById(pageId){
+    document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+    
+    if(pageId==='book-of-changes')renderHexagrams();
+    if(pageId==='inner-library')updateLibraryDisplay();
+    window.scrollTo(0, 0);
+}
+
+function switchTab(event, tab){
+    event.preventDefault();
+    const parent = event.target.closest('.tabs').parentElement;
+    parent.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+    parent.querySelectorAll('.tab-button').forEach(x=>x.classList.remove('active'));
+    event.target.classList.add('active');
+    parent.querySelector(`#${tab}`).classList.add('active');
+    
+    if(tab === 'dream-analysis') updateDreamAnalysis();
+}
+
+function renderHexagrams(){
+    const grid=document.getElementById('hexagram-grid');
+    if(!grid)return;
+    grid.innerHTML='';
+    HEXAGRAMS.forEach(h=>{
+        const card=document.createElement('div');
+        card.className='hexagram-card';
+        card.innerHTML=`<div class="hexagram-symbol">☰</div><div class="hexagram-name">${h.name}</div><div class="hexagram-number">${h.n}</div>`;
+        card.onclick=()=>showHexDetail(h);
+        grid.appendChild(card);
+    });
+    
+    const dailyIndex = Math.floor((new Date().getTime() / (1000*60*60*24)) % 64);
+    const daily=HEXAGRAMS[dailyIndex];
+    const dailyDiv=document.getElementById('daily-hex-content');
+    if(dailyDiv){
+        dailyDiv.innerHTML=`<div class="card"><h3>${daily.n}. ${daily.name}</h3><p style="color:var(--secondary);font-style:italic">${daily.ar}</p><div class="section"><h4>Seed</h4><p>${daily.se}</p></div><div class="section"><h4>Presence</h4><p>${daily.pr}</p></div><button onclick="showHexDetail(HEXAGRAMS[${dailyIndex}])">Read Full</button></div>`;
+    }
+}
+
+function showHexDetail(h){
+    document.getElementById('hex-modal-title').textContent=`${h.n}. ${h.name}`;
+    document.getElementById('hex-modal-body').innerHTML=`
+        <div class="section"><h4>${h.ar}</h4><p>${h.se}</p></div>
+        <div class="section"><h4>Presence</h4><p>${h.pr}</p></div>
+        <div class="section"><h4>Transcendence</h4><p>${h.tr}</p></div>
+    `;
+    document.getElementById('hexagram-modal').classList.add('active');
+}
+
+function closeModal(id){
+    document.getElementById(id).classList.remove('active');
+}
+
+function closeModalOnBackdrop(event, id){
+    if(event.target.id === id){
+        closeModal(id);
+    }
+}
+
+function searchHexagrams(q){
+    const results=HEXAGRAMS.filter(h=>h.name.toLowerCase().includes(q.toLowerCase())||h.ar.toLowerCase().includes(q.toLowerCase())||h.n.toString().includes(q));
+    const div=document.getElementById('hex-search-results');
+    div.innerHTML='';
+    if(results.length === 0){
+        div.innerHTML='<p style="color:var(--secondary)">No hexagrams found</p>';
+        return;
+    }
+    results.forEach(h=>{
+        const item=document.createElement('div');
+        item.className='library-item';
+        item.innerHTML=`<div class="library-item-title">${h.n}. ${h.name}</div><p style="margin:0.5rem 0">${h.ar}</p>`;
+        item.onclick=()=>showHexDetail(h);
+        div.appendChild(item);
+    });
+}
+
+function handleBirthForm(e){
+    e.preventDefault();
+    const date=document.getElementById('birth-date').value;
+    const time=document.getElementById('birth-time').value || "noon";
+    const location=document.getElementById('birth-location').value;
+    
+    userData.birthChart={date,time,location};
+    saveData();
+    
+    const successMsg = document.getElementById('chart-success');
+    successMsg.textContent = 'Chart generated successfully!';
+    successMsg.classList.add('show');
+    setTimeout(() => successMsg.classList.remove('show'), 3000);
+    
+    document.getElementById('chart-output').innerHTML=`
+        <div class="card">
+            <h3>Your Birth Chart</h3>
+            <div class="stat-box">
+                <div class="stat-label">Birth Date</div>
+                <div class="stat-number">${date}</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Birth Time</div>
+                <div class="stat-number">${time}</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Birth Location</div>
+                <div style="color:var(--primary);font-weight:600">${location}</div>
+            </div>
+            <div class="section">
+                <h4>Your Cosmic Signature</h4>
+                <p>Your birth date and location create a unique astrological signature reflecting your soul's intention at the moment you entered the world.</p>
+                <ul style="margin-left:1.5rem;margin-top:1rem">
+                    <li><strong>Sun Sign:</strong> Your core identity and essential nature</li>
+                    <li><strong>Moon Sign:</strong> Your emotional inner world</li>
+                    <li><strong>Rising Sign:</strong> How you appear to the world</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h4>Mayan Calendar</h4>
+                <p>Your birth date also corresponds to a position in the Mayan cosmological calendar, revealing your place in cycles of time.</p>
+            </div>
+        </div>
+    `;
+}
+
+function handleDreamForm(e){
+    e.preventDefault();
+    const date=document.getElementById('dream-date').value || new Date().toISOString().split('T')[0];
+    userData.dreams.push({
+        id: Date.now(),
+        date:date,
+        title:document.getElementById('dream-title').value,
+        content:document.getElementById('dream-content').value,
+        emotions:document.getElementById('dream-emotions').value.split(',').filter(x=>x.trim()),
+        symbols:document.getElementById('dream-symbols').value.split(',').filter(x=>x.trim())
+    });
+    saveData();
+    
+    const successMsg = document.getElementById('dream-success');
+    successMsg.textContent = 'Dream saved!';
+    successMsg.classList.add('show');
+    setTimeout(() => successMsg.classList.remove('show'), 3000);
+    
+    document.getElementById('dream-title').value='';
+    document.getElementById('dream-content').value='';
+    document.getElementById('dream-emotions').value='';
+    document.getElementById('dream-symbols').value='';
+    document.getElementById('dream-date').value='';
+    renderDreams();
+}
+
+function renderDreams(){
+    const list=document.getElementById('dream-entries-list');
+    list.innerHTML='';
+    if(userData.dreams.length === 0){
+        list.innerHTML='<p style="color:var(--secondary);text-align:center;padding:2rem">No dreams recorded yet</p>';
+        return;
+    }
+    userData.dreams.slice().reverse().forEach(d=>{
+        const item=document.createElement('div');
+        item.className='library-item';
+        item.innerHTML=`<div class="library-item-title">${d.title}</div><p>${d.content.substring(0,80)}${d.content.length>80?'...':''}</p><div class="library-item-meta">${d.date}</div><div class="library-item-buttons"><button onclick="editDream(${d.id})">Edit</button><button class="delete-btn" onclick="deleteDream(${d.id})">Delete</button></div>`;
+        list.appendChild(item);
+    });
+}
+
+function searchDreams(q){
+    const list=document.getElementById('dream-entries-list');
+    if(!q.trim()){
+        renderDreams();
+        return;
+    }
+    list.innerHTML='';
+    const filtered = userData.dreams.filter(d=>d.title.toLowerCase().includes(q.toLowerCase()) || d.content.toLowerCase().includes(q.toLowerCase()));
+    if(filtered.length === 0){
+        list.innerHTML='<p style="color:var(--secondary)">No dreams match your search</p>';
+        return;
+    }
+    filtered.forEach(d=>{
+        const item=document.createElement('div');
+        item.className='library-item';
+        item.innerHTML=`<div class="library-item-title">${d.title}</div><p>${d.content.substring(0,80)}${d.content.length>80?'...':''}</p><div class="library-item-meta">${d.date}</div><div class="library-item-buttons"><button onclick="editDream(${d.id})">Edit</button><button class="delete-btn" onclick="deleteDream(${d.id})">Delete</button></div>`;
+        list.appendChild(item);
+    });
+}
+
+function deleteDream(id){
+    if(confirm('Delete this dream?')){
+        userData.dreams = userData.dreams.filter(d=>d.id !== id);
+        saveData();
+        renderDreams();
+    }
+}
+
+function editDream(id){
+    const dream = userData.dreams.find(d=>d.id === id);
+    if(!dream)return;
+    document.getElementById('dream-date').value = dream.date;
+    document.getElementById('dream-title').value = dream.title;
+    document.getElementById('dream-content').value = dream.content;
+    document.getElementById('dream-emotions').value = dream.emotions.join(', ');
+    document.getElementById('dream-symbols').value = dream.symbols.join(', ');
+    userData.dreams = userData.dreams.filter(d=>d.id !== id);
+    renderDreams();
+    window.scrollTo(0,0);
+}
+
+function handleSymbolForm(e){
+    e.preventDefault();
+    userData.symbols.push({
+        id:Date.now(),
+        name:document.getElementById('symbol-name').value,
+        meaning:document.getElementById('symbol-meaning').value
+    });
+    saveData();
+    
+    const successMsg = document.getElementById('symbol-success');
+    successMsg.textContent = 'Symbol added!';
+    successMsg.classList.add('show');
+    setTimeout(() => successMsg.classList.remove('show'), 3000);
+    
+    document.getElementById('symbol-name').value='';
+    document.getElementById('symbol-meaning').value='';
+    renderSymbols();
+}
+
+function renderSymbols(){
+    const list=document.getElementById('symbol-entries-list');
+    list.innerHTML='';
+    if(userData.symbols.length === 0){
+        list.innerHTML='<p style="color:var(--secondary);text-align:center;padding:2rem">No symbols yet</p>';
+        return;
+    }
+    userData.symbols.forEach(s=>{
+        const item=document.createElement('div');
+        item.className='library-item';
+        item.innerHTML=`<div class="library-item-title">${s.name}</div><p>${s.meaning}</p><div class="library-item-buttons"><button onclick="editSymbol(${s.id})">Edit</button><button class="delete-btn" onclick="deleteSymbol(${s.id})">Delete</button></div>`;
+        list.appendChild(item);
+    });
+}
+
+function searchSymbols(q){
+    const list=document.getElementById('symbol-entries-list');
+    if(!q.trim()){
+        renderSymbols();
+        return;
+    }
+    list.innerHTML='';
+    const filtered = userData.symbols.filter(s=>s.name.toLowerCase().includes(q.toLowerCase()));
+    if(filtered.length === 0){
+        list.innerHTML='<p style="color:var(--secondary)">No symbols match your search</p>';
+        return;
+    }
+    filtered.forEach(s=>{
+        const item=document.createElement('div');
+        item.className='library-item';
+        item.innerHTML=`<div class="library-item-title">${s.name}</div><p>${s.meaning}</p><div class="library-item-buttons"><button onclick="editSymbol(${s.id})">Edit</button><button class="delete-btn" onclick="deleteSymbol(${s.id})">Delete</button></div>`;
+        list.appendChild(item);
+    });
+}
+
+function deleteSymbol(id){
+    if(confirm('Delete this symbol?')){
+        userData.symbols = userData.symbols.filter(s=>s.id !== id);
+        saveData();
+        renderSymbols();
+    }
+}
+
+function editSymbol(id){
+    const symbol = userData.symbols.find(s=>s.id === id);
+    if(!symbol)return;
+    document.getElementById('symbol-name').value = symbol.name;
+    document.getElementById('symbol-meaning').value = symbol.meaning;
+    userData.symbols = userData.symbols.filter(s=>s.id !== id);
+    renderSymbols();
+    window.scrollTo(0,0);
+}
+
+function handleWritingForm(e){
+    e.preventDefault();
+    userData.writings.push({
+        id:Date.now(),
+        title:document.getElementById('writing-title').value,
+        content:document.getElementById('writing-content').value,
+        date: new Date().toISOString().split('T')[0]
+    });
+    saveData();
+    
+    const successMsg = document.getElementById('writing-success');
+    successMsg.textContent = 'Writing saved!';
+    successMsg.classList.add('show');
+    setTimeout(() => successMsg.classList.remove('show'), 3000);
+    
+    document.getElementById('writing-title').value='';
+    document.getElementById('writing-content').value='';
+    renderWritings();
+}
+
+function renderWritings(){
+    const list=document.getElementById('user-writings-list');
+    list.innerHTML='';
+    if(userData.writings.length === 0){
+        list.innerHTML='<p style="color:var(--secondary);text-align:center;padding:2rem">No writings yet</p>';
+        return;
+    }
+    userData.writings.slice().reverse().forEach(w=>{
+        const item=document.createElement('div');
+        item.className='library-item';
+        item.innerHTML=`<div class="library-item-title">${w.title}</div><p>${w.content.substring(0,80)}${w.content.length>80?'...':''}</p><div class="library-item-meta">${w.date}</div><div class="library-item-buttons"><button onclick="editWriting(${w.id})">Edit</button><button class="delete-btn" onclick="deleteWriting(${w.id})">Delete</button></div>`;
+        list.appendChild(item);
+    });
+}
+
+function searchWritings(q){
+    const list=document.getElementById('user-writings-list');
+    if(!q.trim()){
+        renderWritings();
+        return;
+    }
+    list.innerHTML='';
+    const filtered = userData.writings.filter(w=>w.title.toLowerCase().includes(q.toLowerCase()) || w.content.toLowerCase().includes(q.toLowerCase()));
+    if(filtered.length === 0){
+        list.innerHTML='<p style="color:var(--secondary)">No writings match your search</p>';
+        return;
+    }
+    filtered.forEach(w=>{
+        const item=document.createElement('div');
+        item.className='library-item';
+        item.innerHTML=`<div class="library-item-title">${w.title}</div><p>${w.content.substring(0,80)}${w.content.length>80?'...':''}</p><div class="library-item-meta">${w.date}</div><div class="library-item-buttons"><button onclick="editWriting(${w.id})">Edit</button><button class="delete-btn" onclick="deleteWriting(${w.id})">Delete</button></div>`;
+        list.appendChild(item);
+    });
+}
+
+function deleteWriting(id){
+    if(confirm('Delete this writing?')){
+        userData.writings = userData.writings.filter(w=>w.id !== id);
+        saveData();
+        renderWritings();
+    }
+}
+
+function editWriting(id){
+    const writing = userData.writings.find(w=>w.id === id);
+    if(!writing)return;
+    document.getElementById('writing-title').value = writing.title;
+    document.getElementById('writing-content').value = writing.content;
+    userData.writings = userData.writings.filter(w=>w.id !== id);
+    renderWritings();
+    window.scrollTo(0,0);
+}
+
+function handleProfileForm(e){
+    e.preventDefault();
+    userData.profile={
+        name:document.getElementById('profile-name').value,
+        bio:document.getElementById('profile-bio').value,
+        spirituality:document.getElementById('profile-spirituality').value,
+        seeking:document.getElementById('profile-seeking').value
+    };
+    saveData();
+    
+    const successMsg = document.getElementById('profile-success');
+    successMsg.textContent = 'Profile created!';
+    successMsg.classList.add('show');
+    setTimeout(() => successMsg.classList.remove('show'), 3000);
+    
+    displayProfile();
+}
+
+function displayProfile(){
+    if(!userData.profile){
+        document.getElementById('profile-form-container').style.display='block';
+        document.getElementById('profile-display').style.display='none';
+        return;
+    }
+    document.getElementById('profile-form-container').style.display='none';
+    document.getElementById('profile-display').style.display='block';
+    
+    const p = userData.profile;
+    document.getElementById('profile-content').innerHTML=`
+        <div class="stat-box">
+            <div style="font-size:1.5rem;font-weight:600;color:var(--primary)">${p.name}</div>
+        </div>
+        <div class="section">
+            <h4>About</h4>
+            <p>${p.bio || 'No bio added'}</p>
+        </div>
+        <div class="section">
+            <h4>Spiritual Interests</h4>
+            <p>${p.spirituality || 'Not specified'}</p>
+        </div>
+        <div class="section">
+            <h4>Looking For</h4>
+            <p style="text-transform:capitalize">${p.seeking}</p>
+        </div>
+    `;
+}
+
+function editProfile(){
+    document.getElementById('profile-name').value = userData.profile.name;
+    document.getElementById('profile-bio').value = userData.profile.bio;
+    document.getElementById('profile-spirituality').value = userData.profile.spirituality;
+    document.getElementById('profile-seeking').value = userData.profile.seeking;
+    userData.profile = null;
+    displayProfile();
+    window.scrollTo(0,0);
+}
+
+function updateDreamAnalysis(){
+    const output = document.getElementById('dream-analysis-output');
+    if(userData.dreams.length === 0){
+        output.innerHTML='<div class="card"><p style="color:var(--secondary);text-align:center">Record some dreams to see analysis</p></div>';
+        return;
+    }
+    
+    const symbolFreq = {};
+    const emotionFreq = {};
+    userData.dreams.forEach(d=>{
+        d.symbols.forEach(s=>symbolFreq[s]=(symbolFreq[s]||0)+1);
+        d.emotions.forEach(e=>emotionFreq[e]=(emotionFreq[e]||0)+1);
+    });
+    
+    const topSymbols = Object.entries(symbolFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    const topEmotions = Object.entries(emotionFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    
+    output.innerHTML=`
+        <div class="card">
+            <h3>Dream Patterns</h3>
+            <div class="stat-box">
+                <div class="stat-number">${userData.dreams.length}</div>
+                <div class="stat-label">Total Dreams Recorded</div>
+            </div>
+            <div class="section">
+                <h4>Most Frequent Symbols</h4>
+                ${topSymbols.length>0?`<ul style="margin-left:1.5rem">${topSymbols.map(s=>`<li><strong>${s[0]}</strong> (${s[1]} appearance${s[1]>1?'s':''})</li>`).join('')}</ul>`:'<p style="color:var(--secondary)">No symbols yet</p>'}
+            </div>
+            <div class="section">
+                <h4>Most Frequent Emotions</h4>
+                ${topEmotions.length>0?`<ul style="margin-left:1.5rem">${topEmotions.map(e=>`<li><strong>${e[0]}</strong> (${e[1]} time${e[1]>1?'s':''})</li>`).join('')}</ul>`:'<p style="color:var(--secondary)">No emotions recorded</p>'}
+            </div>
+        </div>
+    `;
+}
+
+function updateLibraryDisplay(){
+    const total = userData.dreams.length + userData.symbols.length + userData.writings.length;
+    document.getElementById('library-count').textContent = total;
+    
+    const container = document.getElementById('library-items');
+    container.innerHTML = '';
+    
+    if(userData.dreams.length>0){
+        const section = document.createElement('div');
+        section.innerHTML=`<h3>Dreams (${userData.dreams.length})</h3>`;
+        userData.dreams.slice().reverse().slice(0,3).forEach(d=>{
+            const item=document.createElement('div');
+            item.className='library-item';
+            item.innerHTML=`<div class="library-item-title">${d.title}</div><div class="library-item-meta">${d.date}</div>`;
+            section.appendChild(item);
+        });
+        if(userData.dreams.length>3){
+            const more = document.createElement('p');
+            more.style.color='var(--secondary)';
+            more.style.marginTop='1rem';
+            more.textContent=`+${userData.dreams.length-3} more`;
+            section.appendChild(more);
+        }
+        container.appendChild(section);
+    }
+    
+    if(userData.writings.length>0){
+        const section = document.createElement('div');
+        section.style.marginTop='2rem';
+        section.innerHTML=`<h3>Writings (${userData.writings.length})</h3>`;
+        userData.writings.slice().reverse().slice(0,3).forEach(w=>{
+            const item=document.createElement('div');
+            item.className='library-item';
+            item.innerHTML=`<div class="library-item-title">${w.title}</div><div class="library-item-meta">${w.date}</div>`;
+            section.appendChild(item);
+        });
+        if(userData.writings.length>3){
+            const more = document.createElement('p');
+            more.style.color='var(--secondary)';
+            more.style.marginTop='1rem';
+            more.textContent=`+${userData.writings.length-3} more`;
+            section.appendChild(more);
+        }
+        container.appendChild(section);
+    }
+    
+    if(userData.symbols.length>0){
+        const section = document.createElement('div');
+        section.style.marginTop='2rem';
+        section.innerHTML=`<h3>Symbols (${userData.symbols.length})</h3>`;
+        userData.symbols.slice(0,3).forEach(s=>{
+            const item=document.createElement('div');
+            item.className='library-item';
+            item.innerHTML=`<div class="library-item-title">${s.name}</div>`;
+            section.appendChild(item);
+        });
+        if(userData.symbols.length>3){
+            const more = document.createElement('p');
+            more.style.color='var(--secondary)';
+            more.style.marginTop='1rem';
+            more.textContent=`+${userData.symbols.length-3} more`;
+            section.appendChild(more);
+        }
+        container.appendChild(section);
+    }
+    
+    if(total === 0){
+        container.innerHTML='<p style="color:var(--secondary);text-align:center;padding:2rem">Your library is empty</p>';
+    }
+}
+
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(userData));}
+
+function loadData(){
+    const data=localStorage.getItem(STORAGE_KEY);
+    if(data)userData=JSON.parse(data);
+    if(localStorage.getItem(STORAGE_KEY+'_dark'))document.body.classList.add('dark-mode');
+    renderDreams();
+    renderSymbols();
+    renderWritings();
+    displayProfile();
+}
+
+function exportAllData(){
+    const blob=new Blob([JSON.stringify(userData,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='oosai-backup-'+new Date().toISOString().split('T')[0]+'.json';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function toggleDarkMode(){
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem(STORAGE_KEY+'_dark',document.body.classList.contains('dark-mode'));
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+    loadData();
+});
+</script>
+
+</body>
+</html>
